@@ -1,0 +1,42 @@
+---
+-
+  environment:
+    AWS_ACCESS_KEY_ID: 
+    AWS_SECRET_ACCESS_KEY: 
+  hosts: webservers
+  name: Launching an EC2 Instance
+  vars:
+    keypair: MSRtest
+    instance_type: t2.micro
+    security_group: launch-wizard-2
+    vpc_subnet_id: subnet-98f69cb7
+    image: ami-068ab34816099a0a9
+    region: us-east-1
+  tasks:
+     - name: Launching an EC2 Instance
+       ec2:
+           instance_type: "{{ instance_type }}"
+           image: "{{ image }}"
+           region: "{{ region }}"
+           key_name: "{{ keypair }}"
+           count: 1
+           instance_tags:
+             name: MSR-test-Instance-1
+           group: "{{ security_group }}"
+           vpc_subnet_id: "{{ vpc_subnet_id }}"
+           assign_public_ip: yes
+       register: ec2
+     - name: Launching an 2ndEC2 Instance
+       ec2:
+           instance_type: "{{ instance_type }}"
+           image: "{{ image }}"
+           region: "{{ region }}"
+           key_name: "{{ keypair }}"
+           count: 1
+           instance_tags:
+             name: MSR-test-Instance-2
+           group: "{{ security_group }}"
+           vpc_subnet_id: "{{ vpc_subnet_id }}"
+           assign_public_ip: yes
+       register: ec2-second
+
